@@ -8,3 +8,9 @@ RUN sed -i "s+http://dl-cdn.alpinelinux.org/alpine+${APKPROXY}+g" /etc/apk/repos
 
 FROM nginx:1.19-alpine
 COPY --from=builder /app/docs/.vuepress/dist/ /usr/share/nginx/html/
+RUN echo -e 'server {\n\
+    location / {\n\
+    	root /usr/share/nginx/html;\n\
+		add_header Cache-Control no-store;\n\
+    }\n\
+}' > /etc/nginx/conf.d/default.conf
